@@ -1,29 +1,21 @@
 'use strict';
-
+const { ENUMS } = require('../utils/common');
+const { ADMIN, CUSTOMER, FLIGHT_COMPANY } = ENUMS.USER_ROLES_ENUMS;
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('Users', {
+		await queryInterface.createTable('Roles', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			email: {
-				type: Sequelize.STRING,
+			name: {
+				type: Sequelize.ENUM,
+				values: [ADMIN, CUSTOMER, FLIGHT_COMPANY],
 				allowNull: false,
-				unique: true,
-				validate: {
-					isEmail: true,
-				},
-			},
-			password: {
-				type: Sequelize.STRING,
-				allowNull: false,
-				validate: {
-					len: [3, 50],
-				},
+				defaultValue: CUSTOMER,
 			},
 			createdAt: {
 				allowNull: false,
@@ -36,6 +28,6 @@ module.exports = {
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('Users');
+		await queryInterface.dropTable('Roles');
 	},
 };
